@@ -1,0 +1,8 @@
+build/
+bin/
+obj/
+.vs/
+*.userprefs
+*.csproj.user
+packages/
+.DS_Store

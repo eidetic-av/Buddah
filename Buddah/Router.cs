@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Commons.Music.Midi;
 
-namespace Buddah
+namespace Eidetic.Buddah
 {
     public class Router
     {
