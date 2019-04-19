@@ -1,25 +1,35 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Eidetic.Buddah
 {
     class Program
     {
-        static void Main(string[] args)
+        static bool Running = true;
+
+        static async Task Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += CloseApp;
+            Console.CancelKeyPress += CloseApp;
+
             Console.WriteLine("Buddah Audio and Midi Manager by Eidetic");
             Console.WriteLine();
 
-            AppDomain.CurrentDomain.ProcessExit += CloseApp;
+            await Router.Forward("Engine MIDI", "OP-1 Midi Device");
+            await Router.Forward("Engine MIDI", "Moog Minitaur");
 
-            Router.Forward("Engine MIDI", "OP-1 Midi Device");
-            Router.Forward("Engine MIDI", "Moog Minitaur");
+            while (Running)
+            {
+                Console.Read();
+            }
 
-            Console.ReadKey();
+            Environment.Exit(0);
         }
 
         private static void CloseApp(object sender, EventArgs e)
         {
-            Router.Stop();
+            Manager.Close();
+            Running = false;
         }
     }
 }
