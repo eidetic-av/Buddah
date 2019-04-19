@@ -5,7 +5,7 @@ using System.Text;
 using Commons.Music.Midi;
 using System.Threading.Tasks;
 
-namespace Eidetic.Buddah
+namespace Eidetic.Buddah.Midi
 {
     static class Manager
     {
