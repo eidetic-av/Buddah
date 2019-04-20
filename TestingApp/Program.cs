@@ -15,11 +15,11 @@ namespace Eidetic.Buddah
             Console.WriteLine("Buddah Audio and Midi Manager by Eidetic");
             Console.WriteLine();
 
-            await Midi.Router.Forward("Engine MIDI", "OP-1 Midi Device");
-            await Midi.Router.Forward("Engine MIDI", "Moog Minitaur");
-            await Midi.Router.Forward("Engine MIDI", "loopMIDI Port");
-            await Midi.Router.Forward("OP-1 Midi Device", "loopMIDI Port");
-            await Midi.Router.Forward("Moog Minitaur", "loopMIDI Port");
+            await Midi.MidiRouter.Forward("Engine MIDI", "OP-1 Midi Device");
+            await Midi.MidiRouter.Forward("Engine MIDI", "Moog Minitaur");
+            await Midi.MidiRouter.Forward("Engine MIDI", "loopMIDI Port");
+            await Midi.MidiRouter.Forward("OP-1 Midi Device", "loopMIDI Port");
+            await Midi.MidiRouter.Forward("Moog Minitaur", "loopMIDI Port");
 
             while (Running)
             {
@@ -29,7 +29,7 @@ namespace Eidetic.Buddah
 
         private static void CloseApp(object sender, EventArgs e)
         {
-            Midi.Manager.Close();
+            Midi.MidiManager.Close();
             Running = false;
         }
     }

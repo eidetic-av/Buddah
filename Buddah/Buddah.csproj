@@ -1,19 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Platforms>AnyCPU;x64</Platforms>
-    <RootNamespace>Eidetic.Buddah</RootNamespace>
-    <Authors>Eidetic</Authors>
-    <Company>Eidetic</Company>
-    <RepositoryUrl>https://github.com/eidetic-av/Buddah</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageProjectUrl></PackageProjectUrl>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="managed-midi" Version="1.9.0" />
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.16.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- Make this conditional in the future for desktop, mobile etc. -->
+    <Reference Include="lib/Desktop/Commons.Music.Midi.dll" />
+  </ItemGroup>
+
+  <Target Name="CleanAfterRepack" AfterTargets="ILRepacker">
+    <ItemGroup>
+      <OtherFiles Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
+      <OtherFiles Include="$(OutputPath)*.pdb" />
+    </ItemGroup>
+    <Delete Files="%(OtherFiles.Identity)" />
+  </Target>
 
 </Project>

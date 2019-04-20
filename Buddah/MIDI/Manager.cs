@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace Eidetic.Buddah.Midi
 {
-    static class Manager
+    public static class MidiManager
     {
         public static IMidiAccess AccessManager { get; private set; }
 
-        public static IEnumerable<IMidiPortDetails> AvailableInputs => AccessManager.Inputs;
-        public static IEnumerable<IMidiPortDetails> AvailableOutputs => AccessManager.Outputs;
+        public static List<IMidiPortDetails> AvailableInputs => AccessManager.Inputs.ToList();
+        public static List<IMidiPortDetails> AvailableOutputs => AccessManager.Outputs.ToList();
 
         public static Dictionary<string, IMidiInput> ActiveInputs { get; private set; } = new Dictionary<string, IMidiInput>();
         public static Dictionary<string, IMidiOutput> ActiveOutputs { get; private set; } = new Dictionary<string, IMidiOutput>();
 
-        static Manager()
+        static MidiManager()
         {
             AccessManager = MidiAccessManager.Default;
             Logger.WriteLine("Available MIDI Inputs ({0}): ", AccessManager.Inputs.Count());
-            AccessManager.Inputs.ToList().ForEach(i => Logger.WriteLine("    " + i.Name));
+            AvailableInputs.ForEach(i => Logger.WriteLine("    " + i.Name));
             Logger.WriteLine();
             Logger.WriteLine("Available MIDI Outputs: ");
-            AccessManager.Outputs.ToList().ForEach(o => Logger.WriteLine("    " + o.Name));
+            AvailableOutputs.ForEach(o => Logger.WriteLine("    " + o.Name));
             Logger.WriteLine();
         }
 

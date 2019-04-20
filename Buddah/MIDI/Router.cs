@@ -6,16 +6,16 @@ using Commons.Music.Midi;
 
 namespace Eidetic.Buddah.Midi
 {
-    public static class Router
+    public static class MidiRouter
     {
         public static async Task<bool> Forward(string inputDeviceName, string outputDeviceName)
         {
-            if (!await Manager.EnsureInputReady(inputDeviceName)) return false;
-            if (!await Manager.EnsureOutputReady(outputDeviceName)) return false;
+            if (!await MidiManager.EnsureInputReady(inputDeviceName)) return false;
+            if (!await MidiManager.EnsureOutputReady(outputDeviceName)) return false;
 
             // Forward all messages received to the output device
-            Manager.ActiveInputs[inputDeviceName].MessageReceived += (object s, MidiReceivedEventArgs e) =>
-                Manager.ActiveOutputs[outputDeviceName].Send(e.Data, e.Start, e.Length, e.Timestamp);
+            MidiManager.ActiveInputs[inputDeviceName].MessageReceived += (object s, MidiReceivedEventArgs e) =>
+                MidiManager.ActiveOutputs[outputDeviceName].Send(e.Data, e.Start, e.Length, e.Timestamp);
 
             Logger.WriteLine("Successfully attached {0} to {1} for message forwarding.", inputDeviceName, outputDeviceName);
 
