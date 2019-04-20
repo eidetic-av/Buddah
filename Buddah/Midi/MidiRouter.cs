@@ -14,8 +14,8 @@ namespace Eidetic.Buddah.Midi
             if (!await MidiManager.EnsureOutputReady(outputDeviceName)) return false;
 
             // Forward all messages received to the output device
-            MidiManager.ActiveInputs[inputDeviceName].MessageReceived += (object s, MidiReceivedEventArgs e) =>
-                MidiManager.ActiveOutputs[outputDeviceName].Send(e.Data, e.Start, e.Length, e.Timestamp);
+            MidiManager.ActiveInputDevices[inputDeviceName].MessageReceived += (MidiReceivedEventArgs e) =>
+                MidiManager.ActiveOutputDevices[outputDeviceName].Send(e.Data, e.Start, e.Length, e.Timestamp);
 
             Logger.WriteLine("Successfully attached {0} to {1} for message forwarding.", inputDeviceName, outputDeviceName);
 
