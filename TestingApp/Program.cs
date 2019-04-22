@@ -20,7 +20,7 @@ class Program
         await MidiRouter.Forward("OP-1 Midi Device", "loopMIDI Port");
         await MidiRouter.Forward("Moog Minitaur", "loopMIDI Port");
 
-        MidiManager.ActiveInputDevices["Moog Minitaur"].ControlChange += (int ccNumber, int value) => Console.WriteLine("ey: " + value);
+        //MidiManager.ActiveInputDevices["Moog Minitaur"].ControlChange += (int ccNumber, int value) => Console.WriteLine("ey: " + value);
 
         while (Running)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Commons.Music.Midi;
+using System.Threading.Tasks;
 
 namespace Eidetic.Buddah.Midi
 {
@@ -34,12 +35,16 @@ namespace Eidetic.Buddah.Midi
 
         void ProcessMessageReceived(object sender, MidiReceivedEventArgs e)
         {
-            MessageReceived.Invoke(e);
+            var messageType = (MessageType)(e.Data[0] >> 4);
+
+            // managed-midi breaks on clock message through Port.Send
+            if (messageType != MessageType.Clock)
+                MessageReceived.Invoke(e);
 
             // Extract the information from the MIDI byte array,
             // and invoke the respective callbacks
 
-            switch ((MessageType)(e.Data[0] >> 4))
+            switch (messageType)
             {
                 case MessageType.NoteOn:
                     {
@@ -62,13 +67,31 @@ namespace Eidetic.Buddah.Midi
                         ControlChange.Invoke(ccNumber, value);
                         break;
                     }
+                case MessageType.Clock:
+                    {
+                        CalculateMidiClock(e.Timestamp);
+                        break;
+                    }
                 default: break;
+            }
+        }
+
+        public float BPM { get; private set; }
+        Queue<long> MidiClockTimestamps = new Queue<long>();
+        void CalculateMidiClock(long timestamp)
+        {
+            MidiClockTimestamps.Enqueue(timestamp);
+            if (MidiClockTimestamps.Count == 25)
+            {
+                var earliestTime = MidiClockTimestamps.Dequeue();
+                BPM = 60000f / (timestamp - earliestTime);
             }
         }
 
         enum MessageType
         {
-            NoteOn = 9, NoteOff = 8, ControlChange = 11
+            NoteOn = 9, NoteOff = 8, ControlChange = 11, Clock = 15
         }
+
     }
 }
